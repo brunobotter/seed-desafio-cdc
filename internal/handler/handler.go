@@ -2,15 +2,15 @@ package handler
 
 import (
 	"github.com/brunobotter/casa-codigo/configs"
-	authorHandler "github.com/brunobotter/casa-codigo/internal/handler/author"
+	"github.com/brunobotter/casa-codigo/internal/handler/controller"
 )
 
 var (
-	logger           *configs.Logger
-	AuthorController *authorHandler.AuthorController
+	AuthorController   *controller.AuthorController
+	CategoryController *controller.CategoryController
 )
 
 func InitializeHandler(deps *configs.Deps) {
-	logger = configs.GetLogger("handler")
-	AuthorController = authorHandler.NewAuthorController(deps.Cfg, deps.Svc)
+	AuthorController = controller.NewAuthorController(deps.Svc)
+	CategoryController = controller.NewCategoryController(deps.Svc)
 }

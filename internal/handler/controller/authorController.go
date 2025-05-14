@@ -1,9 +1,8 @@
-package authorHandler
+package controller
 
 import (
 	"net/http"
 
-	"github.com/brunobotter/casa-codigo/configs/mapping"
 	"github.com/brunobotter/casa-codigo/internal/domain/contract"
 	"github.com/brunobotter/casa-codigo/internal/request"
 	"github.com/brunobotter/casa-codigo/internal/util"
@@ -12,13 +11,11 @@ import (
 
 type AuthorController struct {
 	svc contract.ServiceManager
-	cfg *mapping.Config
 }
 
-func NewAuthorController(cfg *mapping.Config, svc contract.ServiceManager) *AuthorController {
+func NewAuthorController(svc contract.ServiceManager) *AuthorController {
 	return &AuthorController{
 		svc: svc,
-		cfg: cfg,
 	}
 }
 
