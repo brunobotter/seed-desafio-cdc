@@ -16,5 +16,5 @@ func main() {
 		logger.Errorf("Config initialize with error")
 		return
 	}
-	router.Initialize()
+	router.Initialize(deps)
 }

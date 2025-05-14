@@ -2,16 +2,15 @@ package handler
 
 import (
 	"github.com/brunobotter/casa-codigo/configs"
-	"gorm.io/gorm"
+	authorHandler "github.com/brunobotter/casa-codigo/internal/handler/author"
 )
 
 var (
-	logger *configs.Logger
-	db     *gorm.DB
+	logger           *configs.Logger
+	AuthorController *authorHandler.AuthorController
 )
 
-func InitializeHandler() {
+func InitializeHandler(deps *configs.Deps) {
 	logger = configs.GetLogger("handler")
-	db = configs.GetMySql()
-	//service.InitializeService(db)
+	AuthorController = authorHandler.NewAuthorController(deps.Cfg, deps.Svc)
 }

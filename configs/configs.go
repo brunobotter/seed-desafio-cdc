@@ -4,6 +4,8 @@ import (
 	"os"
 
 	"github.com/brunobotter/casa-codigo/configs/mapping"
+	"github.com/brunobotter/casa-codigo/internal/data/datasql"
+	"github.com/brunobotter/casa-codigo/internal/data/model"
 	"github.com/brunobotter/casa-codigo/internal/domain/contract"
 	"github.com/brunobotter/casa-codigo/internal/domain/service"
 	"github.com/spf13/viper"
@@ -12,13 +14,12 @@ import (
 )
 
 var (
-	db     *gorm.DB
 	logger *Logger
 )
 
 type Deps struct {
 	Cfg *mapping.Config
-	DB  *gorm.DB
+	DB  contract.DataManager
 	Svc contract.ServiceManager
 }
 
@@ -41,10 +42,6 @@ func GetLogger(p string) *Logger {
 	return logger
 }
 
-func GetMySql() *gorm.DB {
-	return db
-}
-
 func (deps *Deps) ConfigDB() *Deps {
 	logger := GetLogger("mysql")
 	dsn := "root:171191@tcp(127.0.0.1:3306)/casa-codigo?charset=utf8mb4&parseTime=true&loc=Local"
@@ -54,13 +51,13 @@ func (deps *Deps) ConfigDB() *Deps {
 		logger.Errorf("mysql carrinho error: %v", err)
 		return nil
 	}
-	//migrate scheama
-	/*err = db.AutoMigrate(&scheamas.Carrinho{})
+
+	err = db.AutoMigrate(&model.AuthorModel{})
 	if err != nil {
 		logger.Errorf("mysql automigration error: %v", err)
-		return nil, err
-	}*/
-	deps.DB = db
+		return nil
+	}
+	deps.DB = datasql.NewDataManager(db)
 	return deps
 }
 

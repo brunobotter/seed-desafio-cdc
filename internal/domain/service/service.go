@@ -3,12 +3,11 @@ package service
 import (
 	"github.com/brunobotter/casa-codigo/configs/mapping"
 	"github.com/brunobotter/casa-codigo/internal/domain/contract"
-	"gorm.io/gorm"
 )
 
 type serviceManager struct {
 	cfg             *mapping.Config
-	db              *gorm.DB
+	db              contract.DataManager
 	internalService contract.InternalService
 }
 
@@ -16,10 +15,9 @@ func (s *serviceManager) Config() *mapping.Config {
 	return s.cfg
 }
 
-func (s *serviceManager) DB() *gorm.DB {
+func (s *serviceManager) DB() contract.DataManager {
 	return s.db
 }
-
 func (s *serviceManager) InternalService() contract.InternalService {
 	return s.internalService
 }
@@ -34,7 +32,7 @@ func (s *internalServices) AuthorService() contract.AuthorService {
 
 type ServiceDeps struct {
 	Cfg *mapping.Config
-	DB  *gorm.DB
+	DB  contract.DataManager
 }
 
 func New(deps ServiceDeps) (contract.ServiceManager, error) {
@@ -44,7 +42,7 @@ func New(deps ServiceDeps) (contract.ServiceManager, error) {
 	}
 
 	internalServices := internalServices{}
-	internalServices.authorService = NewAuthorIntegrationService(instance)
+	internalServices.authorService = NewAuthorInternalService(instance)
 	instance.internalService = &internalServices
 	return instance, nil
 }

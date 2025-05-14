@@ -5,12 +5,12 @@ import (
 
 	"github.com/brunobotter/casa-codigo/configs/mapping"
 	"github.com/brunobotter/casa-codigo/internal/request"
-	"gorm.io/gorm"
+	"github.com/brunobotter/casa-codigo/internal/response"
 )
 
 type ServiceManager interface {
 	Config() *mapping.Config
-	DB() *gorm.DB
+	DB() DataManager
 	InternalService() InternalService
 }
 
@@ -19,5 +19,5 @@ type InternalService interface {
 }
 
 type AuthorService interface {
-	Save(ctx context.Context, request request.NewAuthorRequest) error
+	Save(ctx context.Context, request request.NewAuthorRequest) (response response.AuthorResponse, err error)
 }
