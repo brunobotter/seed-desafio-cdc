@@ -23,11 +23,21 @@ func (s *serviceManager) InternalService() contract.InternalService {
 }
 
 type internalServices struct {
-	authorService contract.AuthorService
+	authorService   contract.AuthorService
+	categoryService contract.CategoryService
+	bookService     contract.BookService
 }
 
 func (s *internalServices) AuthorService() contract.AuthorService {
 	return s.authorService
+}
+
+func (s *internalServices) CategoryService() contract.CategoryService {
+	return s.categoryService
+}
+
+func (s *internalServices) BookService() contract.BookService {
+	return s.bookService
 }
 
 type ServiceDeps struct {
@@ -43,6 +53,8 @@ func New(deps ServiceDeps) (contract.ServiceManager, error) {
 
 	internalServices := internalServices{}
 	internalServices.authorService = NewAuthorInternalService(instance)
+	internalServices.categoryService = NewCategoryService(instance)
+	internalServices.bookService = NewBookService(instance)
 	instance.internalService = &internalServices
 	return instance, nil
 }

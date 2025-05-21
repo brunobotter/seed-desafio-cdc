@@ -1,4 +1,4 @@
-package authorRouter
+package router
 
 import (
 	"github.com/brunobotter/casa-codigo/configs"

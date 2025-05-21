@@ -25,5 +25,10 @@ func (s *CategoryController) SaveNewCategory(ctx *gin.Context) {
 		util.ResponderApiError(ctx, http.StatusBadRequest, err, "Invalid Body")
 		return
 	}
+	response, err := s.svc.InternalService().CategoryService().Save(ctx, request)
+	if err != nil {
+		util.ResponderApiError(ctx, http.StatusBadRequest, err, "Error to save category")
+	}
+	util.ResponderApiOk(ctx, response)
 
 }

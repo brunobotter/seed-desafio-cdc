@@ -20,3 +20,11 @@ func (d *dataManager) DB() *gorm.DB {
 func (d *dataManager) AuthorRepo() contract.AuthorRepository {
 	return &authorRepository{db: d.db}
 }
+
+func (d *dataManager) CategoryRepo() contract.CategoryRepository {
+	return &categoryRepository{db: d.db}
+}
+
+func (d *dataManager) BookRepo() contract.BookRepository {
+	return &bookRepository{db: d.db}
+}

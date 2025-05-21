@@ -8,9 +8,11 @@ import (
 var (
 	AuthorController   *controller.AuthorController
 	CategoryController *controller.CategoryController
+	BookController     *controller.BookController
 )
 
 func InitializeHandler(deps *configs.Deps) {
 	AuthorController = controller.NewAuthorController(deps.Svc)
 	CategoryController = controller.NewCategoryController(deps.Svc)
+	BookController = controller.NewBookController(deps.Svc)
 }
