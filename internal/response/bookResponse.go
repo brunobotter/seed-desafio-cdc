@@ -20,6 +20,13 @@ type BookResponse struct {
 	CreatedAt    time.Time `json:"created_at"`
 }
 
+type BookListResponse []BookItemResponse
+
+type BookItemResponse struct {
+	ID    uint   `json:"id"`
+	Title string `json:"title"`
+}
+
 func FromBookModel(m model.BookModel) BookResponse {
 	return BookResponse{
 		ID:           m.ID,
@@ -34,4 +41,17 @@ func FromBookModel(m model.BookModel) BookResponse {
 		CategoryName: m.Category.Name,
 		CreatedAt:    m.CreatedAt,
 	}
+}
+
+func FromListBookModel(models []model.BookModel) BookListResponse {
+	var response BookListResponse
+
+	for _, m := range models {
+		response = append(response, BookItemResponse{
+			ID:    m.ID,
+			Title: m.Title,
+		})
+	}
+
+	return response
 }

@@ -36,3 +36,12 @@ func (s *bookService) GetById(ctx context.Context, bookId int64) (bookResponse r
 	bookResponse = response.FromBookModel(bookData)
 	return bookResponse, nil
 }
+
+func (s *bookService) GetAll(ctx context.Context) (bookResponse response.BookListResponse, err error) {
+	bookData, err := s.svc.DB().BookRepo().GetAll(ctx)
+	if err != nil {
+		return nil, err
+	}
+	bookResponse = response.FromListBookModel(bookData)
+	return bookResponse, nil
+}

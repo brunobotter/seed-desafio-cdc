@@ -52,3 +52,13 @@ func (s *BookController) GetById(ctx *gin.Context) {
 	util.ResponderApiOk(ctx, bookResponse)
 
 }
+
+func (s *BookController) GetAll(ctx *gin.Context) {
+
+	bookResponse, err := s.svc.InternalService().BookService().GetAll(ctx)
+	if err != nil {
+		util.ResponderApiError(ctx, http.StatusBadRequest, err, "Error to save book")
+	}
+	util.ResponderApiOk(ctx, bookResponse)
+
+}

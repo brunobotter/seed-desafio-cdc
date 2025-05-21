@@ -39,3 +39,19 @@ func (r *bookRepository) GetById(ctx context.Context, bookId int64) (model.BookM
 
 	return bookModel, nil
 }
+
+func (r *bookRepository) GetAll(ctx context.Context) ([]model.BookModel, error) {
+
+	var books []model.BookModel
+
+	err := r.db.WithContext(ctx).
+		Preload("Author").
+		Preload("Category").
+		Find(&books).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return books, nil
+}
