@@ -26,13 +26,26 @@ func (s *BookController) SaveNewBook(ctx *gin.Context) {
 	}
 	categoryId, err := util.GetAndValidateIntParam(ctx, "categoryId", "Category Id invalid", false)
 	if err != nil {
-		util.ResponderApiError(ctx, http.StatusBadRequest, err, "Error to save book")
+		util.ResponderApiError(ctx, http.StatusBadRequest, err, "Validation error")
 	}
 	authorId, err := util.GetAndValidateIntParam(ctx, "authorId", "Author Id invalid", false)
 	if err != nil {
-		util.ResponderApiError(ctx, http.StatusBadRequest, err, "Error to save book")
+		util.ResponderApiError(ctx, http.StatusBadRequest, err, "Validation error")
 	}
 	bookResponse, err := s.svc.InternalService().BookService().Save(ctx, request, categoryId, authorId)
+	if err != nil {
+		util.ResponderApiError(ctx, http.StatusBadRequest, err, "Error to save book")
+	}
+	util.ResponderApiOk(ctx, bookResponse)
+
+}
+
+func (s *BookController) GetById(ctx *gin.Context) {
+	bookId, err := util.GetAndValidateIntParam(ctx, "bookId", "book Id invalid", false)
+	if err != nil {
+		util.ResponderApiError(ctx, http.StatusBadRequest, err, "Validation error")
+	}
+	bookResponse, err := s.svc.InternalService().BookService().GetById(ctx, bookId)
 	if err != nil {
 		util.ResponderApiError(ctx, http.StatusBadRequest, err, "Error to save book")
 	}

@@ -27,3 +27,12 @@ func (s *bookService) Save(ctx context.Context, request request.NewBookRequest, 
 	bookResponse = response.FromBookModel(bookData)
 	return bookResponse, nil
 }
+
+func (s *bookService) GetById(ctx context.Context, bookId int64) (bookResponse response.BookResponse, err error) {
+	bookData, err := s.svc.DB().BookRepo().GetById(ctx, bookId)
+	if err != nil {
+		return response.BookResponse{}, err
+	}
+	bookResponse = response.FromBookModel(bookData)
+	return bookResponse, nil
+}

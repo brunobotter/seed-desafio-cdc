@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/brunobotter/casa-codigo/internal/data/model"
-	entity "github.com/brunobotter/casa-codigo/internal/domain/entity"
+	"github.com/brunobotter/casa-codigo/internal/domain/entity"
 )
 
 type RepoManager interface {
@@ -23,4 +23,5 @@ type CategoryRepository interface {
 
 type BookRepository interface {
 	Save(ctx context.Context, book entity.Book) (model.BookModel, error)
+	GetById(ctx context.Context, bookId int64) (model.BookModel, error)
 }

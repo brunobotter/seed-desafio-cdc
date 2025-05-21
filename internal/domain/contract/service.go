@@ -30,4 +30,5 @@ type CategoryService interface {
 
 type BookService interface {
 	Save(ctx context.Context, request request.NewBookRequest, categoryId int64, authorId int64) (response response.BookResponse, err error)
+	GetById(ctx context.Context, bookId int64) (response response.BookResponse, err error)
 }

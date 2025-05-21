@@ -23,3 +23,19 @@ func (r *bookRepository) Save(ctx context.Context, book entity.Book) (model.Book
 
 	return bookModel, nil
 }
+
+func (r *bookRepository) GetById(ctx context.Context, bookId int64) (model.BookModel, error) {
+
+	var bookModel model.BookModel
+
+	err := r.db.WithContext(ctx).
+		Preload("Author").
+		Preload("Category").
+		First(&bookModel, bookId).Error
+
+	if err != nil {
+		return model.BookModel{}, err
+	}
+
+	return bookModel, nil
+}
