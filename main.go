@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/brunobotter/casa-codigo/configs"
-	"github.com/brunobotter/casa-codigo/internal/router"
+	"github.com/brunobotter/casa-codigo/internal/routers"
 )
 
 var (
@@ -16,5 +16,5 @@ func main() {
 		logger.Errorf("Config initialize with error")
 		return
 	}
-	router.Initialize(deps)
+	routers.Initialize(deps)
 }
