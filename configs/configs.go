@@ -52,7 +52,7 @@ func (deps *Deps) ConfigDB() *Deps {
 		return nil
 	}
 
-	err = db.AutoMigrate(&model.AuthorModel{})
+	err = db.AutoMigrate(&model.AuthorModel{}, &model.CategoryModel{}, &model.BookModel{})
 	if err != nil {
 		logger.Errorf("mysql automigration error: %v", err)
 		return nil
