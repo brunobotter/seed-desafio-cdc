@@ -17,7 +17,9 @@ type bookRepository struct {
 func (r *bookRepository) Save(ctx context.Context, book entity.Book) (model.BookModel, error) {
 	bookModel := model.ToBookModel(book)
 
-	if err := r.db.WithContext(ctx).Create(&bookModel).Error; err != nil {
+	if err := r.db.WithContext(ctx).
+		Preload("Author").
+		Preload("Category").Create(&bookModel).Error; err != nil {
 		return model.BookModel{}, err
 	}
 

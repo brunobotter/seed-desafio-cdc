@@ -7,9 +7,9 @@ import (
 )
 
 type CategoryModel struct {
-	CategoryID uint   `gorm:"primaryKey"`
-	Name       string `gorm:"unique"`
-	CreatedAt  time.Time
+	ID        uint   `gorm:"primaryKey;autoIncrement"`
+	Name      string `gorm:"unique"`
+	CreatedAt time.Time
 }
 
 func ToCategoryModel(e entity.Category) CategoryModel {

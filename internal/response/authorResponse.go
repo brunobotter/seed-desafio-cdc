@@ -16,7 +16,7 @@ type AuthorResponse struct {
 
 func FromAuthorModel(m model.AuthorModel) AuthorResponse {
 	return AuthorResponse{
-		ID:          m.AuthorID,
+		ID:          m.ID,
 		Name:        m.Name,
 		Email:       m.Email,
 		Description: m.Description,

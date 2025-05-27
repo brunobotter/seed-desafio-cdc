@@ -18,10 +18,10 @@ type BookModel struct {
 	CreatedAt   time.Time
 
 	AuthorID uint
-	Author   AuthorModel `gorm:"foreignKey:AuthorID"`
+	Author   AuthorModel
 
 	CategoryID uint
-	Category   CategoryModel `gorm:"foreignKey:CategoryID"`
+	Category   CategoryModel
 }
 
 func ToBookModel(e entity.Book) BookModel {

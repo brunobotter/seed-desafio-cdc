@@ -14,7 +14,7 @@ type CategoryResponse struct {
 
 func FromCategoryModel(m model.CategoryModel) CategoryResponse {
 	return CategoryResponse{
-		ID:        m.CategoryID,
+		ID:        m.ID,
 		Name:      m.Name,
 		CreatedAt: m.CreatedAt,
 	}
