@@ -33,7 +33,7 @@ func (s *bookService) GetById(ctx context.Context, bookId int64) (bookResponse r
 	if err != nil {
 		return response.BookResponse{}, err
 	}
-	bookResponse = response.FromBookModel(bookData)
+	bookResponse = response.FromBookByIdModel(bookData)
 	return bookResponse, nil
 }
 

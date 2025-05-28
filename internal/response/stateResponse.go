@@ -3,9 +3,9 @@ package response
 import "github.com/brunobotter/casa-codigo/internal/data/model"
 
 type StateResponse struct {
-	ID          uint   `json:"id"`
-	StateName   string `json:"state_name"`
-	CountryName string `json:"country_name"`
+	ID        uint   `json:"id"`
+	StateName string `json:"state_name"`
+	CountryId int64  `json:"countru_id"`
 }
 
 type StateListResponse []StateItemResponse
@@ -17,9 +17,9 @@ type StateItemResponse struct {
 
 func FromStateModel(m model.StateModel) StateResponse {
 	return StateResponse{
-		ID:          m.ID,
-		StateName:   m.Statename,
-		CountryName: m.Country.Name,
+		ID:        m.ID,
+		StateName: m.Statename,
+		CountryId: m.CountryId,
 	}
 }
 

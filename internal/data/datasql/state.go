@@ -30,7 +30,7 @@ func (r *stateRepository) Save(ctx context.Context, state entity.State) (model.S
 		ctx,
 		query,
 		stateModel.Statename,
-		stateModel.CountryID,
+		stateModel.CountryId,
 		stateModel.CreatedAt,
 	)
 	if err != nil {

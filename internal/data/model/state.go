@@ -9,13 +9,13 @@ import (
 type StateModel struct {
 	ID        uint
 	Statename string
-	CountryID uint
+	CountryId int64
 	CreatedAt time.Time
 }
 
 func ToStateModel(e entity.State) StateModel {
 	return StateModel{
 		Statename: e.Name,
-		CountryID: uint(e.CountryId),
+		CountryId: e.CountryId,
 	}
 }

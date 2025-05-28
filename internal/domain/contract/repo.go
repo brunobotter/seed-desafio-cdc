@@ -25,8 +25,8 @@ type CategoryRepository interface {
 
 type BookRepository interface {
 	Save(ctx context.Context, book entity.Book) (model.BookModel, error)
-	GetById(ctx context.Context, bookId int64) (model.BookModel, error)
-	GetAll(ctx context.Context) ([]model.BookModel, error)
+	GetById(ctx context.Context, bookId int64) (model.BookByIdModel, error)
+	GetAll(ctx context.Context) ([]model.BookByAllModel, error)
 }
 
 type CountryRepository interface {
