@@ -4,13 +4,11 @@ import (
 	"os"
 
 	"github.com/brunobotter/casa-codigo/configs/mapping"
-	"github.com/brunobotter/casa-codigo/internal/data/datasql"
-	"github.com/brunobotter/casa-codigo/internal/data/model"
+	"github.com/brunobotter/casa-codigo/internal/data"
+
 	"github.com/brunobotter/casa-codigo/internal/domain/contract"
 	"github.com/brunobotter/casa-codigo/internal/domain/service"
 	"github.com/spf13/viper"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 )
 
 var (
@@ -44,20 +42,14 @@ func GetLogger(p string) *Logger {
 
 func (deps *Deps) ConfigDB() *Deps {
 	logger := GetLogger("mysql")
-	dsn := "root:171191@tcp(127.0.0.1:3306)/casa-codigo?charset=utf8mb4&parseTime=true&loc=Local"
 	//create db and connection
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := data.Connect(deps.Cfg)
 	if err != nil {
 		logger.Errorf("mysql carrinho error: %v", err)
 		return nil
 	}
 
-	err = db.AutoMigrate(&model.AuthorModel{}, &model.CategoryModel{}, &model.BookModel{})
-	if err != nil {
-		logger.Errorf("mysql automigration error: %v", err)
-		return nil
-	}
-	deps.DB = datasql.NewDataManager(db)
+	deps.DB = db
 	return deps
 }
 

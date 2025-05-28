@@ -12,7 +12,7 @@ type authorService struct {
 	svc contract.ServiceManager
 }
 
-func NewAuthorInternalService(svc contract.ServiceManager) contract.AuthorService {
+func NewAuthorService(svc contract.ServiceManager) contract.AuthorService {
 	return &authorService{
 		svc: svc,
 	}

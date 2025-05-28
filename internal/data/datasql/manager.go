@@ -1,30 +1,104 @@
 package datasql
 
 import (
+	"database/sql"
+	"errors"
+	"fmt"
+	"sync"
+	"time"
+
+	"github.com/brunobotter/casa-codigo/configs/mapping"
 	"github.com/brunobotter/casa-codigo/internal/domain/contract"
-	"gorm.io/gorm"
+	"github.com/go-sql-driver/mysql"
 )
 
-type dataManager struct {
-	db *gorm.DB
+var (
+	instance     *Conn
+	dbInstance   *sql.DB
+	onceOB       sync.Once
+	onceInstance sync.Once
+	connErr      error
+)
+
+type Conn struct {
+	db       *sql.DB
+	author   *authorRepository
+	category *categoryRepository
+	book     *bookRepository
+	country  *countryRepository
+	state    *stateRepository
 }
 
-func NewDataManager(db *gorm.DB) contract.DataManager {
-	return &dataManager{db: db}
+func Instance(cfg *mapping.Config) (contract.DataManager, error) {
+	onceInstance.Do(func() {
+		db, err := GetDB(cfg)
+		if err != nil {
+			connErr = errors.New(err.Error())
+			return
+		}
+
+		instance = &Conn{db: db}
+		instance.author = &authorRepository{db, instance}
+		instance.category = &categoryRepository{db, instance}
+		instance.book = &bookRepository{db, instance}
+		instance.country = &countryRepository{db, instance}
+		instance.state = &stateRepository{db, instance}
+	})
+	return instance, connErr
 }
 
-func (d *dataManager) DB() *gorm.DB {
-	return d.db
+func GetDB(cfg *mapping.Config) (*sql.DB, error) {
+	onceOB.Do(func() {
+		mysqlCfg := getMySqlConfig(cfg)
+		db, err := sql.Open("mysql", mysqlCfg.FormatDSN())
+		if err != nil {
+			connErr = errors.New(err.Error())
+			return
+		}
+		maxLifeTimeInMinutes, _ := time.ParseDuration(fmt.Sprintf("%vmin", cfg.DB.MaxLifeTimeInMinutes))
+		db.SetConnMaxIdleTime(maxLifeTimeInMinutes)
+		db.SetMaxIdleConns(cfg.DB.MaxIdleConns)
+		db.SetMaxOpenConns(cfg.DB.MaxOpenConns)
+		err = db.Ping()
+		if err != nil {
+			connErr = errors.New(err.Error())
+			return
+		}
+		dbInstance = db
+	})
+	return dbInstance, connErr
 }
 
-func (d *dataManager) AuthorRepo() contract.AuthorRepository {
-	return &authorRepository{db: d.db}
+func getMySqlConfig(cfg *mapping.Config) *mysql.Config {
+	mysqlConfig := mysql.Config{
+		Net:                  "tcp",
+		Addr:                 fmt.Sprintf("%s:%d", cfg.DB.Host, cfg.DB.Port),
+		DBName:               cfg.DB.Name,
+		User:                 cfg.DB.User,
+		Passwd:               cfg.DB.Pass,
+		ParseTime:            true,
+		AllowNativePasswords: true,
+		Params:               cfg.DB.Params,
+	}
+	return &mysqlConfig
 }
 
-func (d *dataManager) CategoryRepo() contract.CategoryRepository {
-	return &categoryRepository{db: d.db}
+func (c *Conn) AuthorRepo() contract.AuthorRepository {
+	return c.author
 }
 
-func (d *dataManager) BookRepo() contract.BookRepository {
-	return &bookRepository{db: d.db}
+func (c *Conn) CategoryRepo() contract.CategoryRepository {
+	return c.category
+}
+
+func (c *Conn) BookRepo() contract.BookRepository {
+	return c.book
+}
+
+func (c *Conn) CountryRepo() contract.CountryRepository {
+	return c.country
+}
+
+func (c *Conn) StateRepo() contract.StateRepository {
+	return c.state
 }

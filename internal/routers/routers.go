@@ -12,6 +12,8 @@ func Initialize(deps *configs.Deps) {
 	router.InitializeAuthorRouters(gin, deps)
 	router.InitializeCategoryRouters(gin, deps)
 	router.InitializeBookRouter(gin, deps)
+	router.InitializeCountryRouters(gin, deps)
+	router.InitializeStateRouters(gin, deps)
 
 	gin.Run(":8080")
 }

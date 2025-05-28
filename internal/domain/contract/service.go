@@ -18,6 +18,8 @@ type InternalService interface {
 	AuthorService() AuthorService
 	CategoryService() CategoryService
 	BookService() BookService
+	CountryService() CountryService
+	StateService() StateService
 }
 
 type AuthorService interface {
@@ -32,4 +34,12 @@ type BookService interface {
 	Save(ctx context.Context, request request.NewBookRequest, categoryId int64, authorId int64) (response response.BookResponse, err error)
 	GetById(ctx context.Context, bookId int64) (response response.BookResponse, err error)
 	GetAll(ctx context.Context) (response response.BookListResponse, err error)
+}
+
+type CountryService interface {
+	Save(ctx context.Context, request request.NewCountryRequest) (response response.CountryResponse, err error)
+}
+
+type StateService interface {
+	Save(ctx context.Context, request request.NewStateRequest, countryId int64) (response response.StateResponse, err error)
 }
