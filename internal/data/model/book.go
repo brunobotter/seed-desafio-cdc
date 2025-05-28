@@ -7,7 +7,7 @@ import (
 )
 
 type BookModel struct {
-	ID          uint `gorm:"primaryKey"`
+	ID          uint
 	Title       string
 	Resume      string
 	Summary     string
@@ -15,13 +15,9 @@ type BookModel struct {
 	Page        int64
 	ISBN        string
 	PublishDate string
+	AuthorID    uint
+	CategoryID  uint
 	CreatedAt   time.Time
-
-	AuthorID uint
-	Author   AuthorModel
-
-	CategoryID uint
-	Category   CategoryModel
 }
 
 func ToBookModel(e entity.Book) BookModel {
@@ -36,4 +32,23 @@ func ToBookModel(e entity.Book) BookModel {
 		AuthorID:    uint(e.AuthorId),
 		CategoryID:  uint(e.CategoryId),
 	}
+}
+
+type BookByIdModel struct {
+	ID           uint
+	Title        string
+	Resume       string
+	Summary      string
+	Price        float64
+	Page         int64
+	ISBN         string
+	PublishDate  string
+	AuthorName   string
+	CategoryName string
+	CreatedAt    time.Time
+}
+
+type BookByAllModel struct {
+	ID    uint
+	Title string
 }

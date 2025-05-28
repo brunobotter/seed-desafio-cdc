@@ -7,13 +7,10 @@ import (
 )
 
 type StateModel struct {
-	ID        uint   `gorm:"primaryKey"`
-	Statename string `gorm:"unique"`
-
-	CreatedAt time.Time
-
+	ID        uint
+	Statename string
 	CountryID uint
-	Country   CountryModel
+	CreatedAt time.Time
 }
 
 func ToStateModel(e entity.State) StateModel {
