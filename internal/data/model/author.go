@@ -7,9 +7,9 @@ import (
 )
 
 type AuthorModel struct {
-	ID          uint `gorm:"primaryKey;autoIncrement"`
+	ID          uint
 	Name        string
-	Email       string `gorm:"unique"`
+	Email       string
 	Description string
 	CreatedAt   time.Time
 }
