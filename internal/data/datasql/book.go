@@ -21,7 +21,7 @@ func (r *bookRepository) Save(ctx context.Context, book entity.Book) (model.Book
 	bookModel := model.ToBookModel(book)
 
 	query := `
-		INSERT INTO book (title, resume, sumary, price, page, isbn, publish_date, author_id, category_id, created_at)
+		INSERT INTO book (title, resume, summary, price, page, isbn, publish_date, author_id, category_id, created_at)
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 	`
 
@@ -69,7 +69,7 @@ func (r *bookRepository) GetById(ctx context.Context, bookId int64) (model.BookB
 			a.name AS author_name,
 			c.name AS category_name
 		FROM book b
-		INNER JOIN authors a ON b.author_id = a.id
+		INNER JOIN author a ON b.author_id = a.id
 		INNER JOIN category c ON b.category_id = c.id
 		WHERE b.id = ?
 	`

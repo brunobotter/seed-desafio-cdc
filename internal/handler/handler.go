@@ -11,6 +11,8 @@ var (
 	BookController     *controller.BookController
 	CountryController  *controller.CountryController
 	StateController    *controller.StateController
+	PaymentController  *controller.PaymentController
+	CustomerController *controller.CustomerController
 )
 
 func InitializeHandler(deps *configs.Deps) {
@@ -19,4 +21,6 @@ func InitializeHandler(deps *configs.Deps) {
 	BookController = controller.NewBookController(deps.Svc)
 	CountryController = controller.NewCountryController(deps.Svc)
 	StateController = controller.NewStateController(deps.Svc)
+	PaymentController = controller.NewPaymentController(deps.Svc)
+	CustomerController = controller.NewCustomerController(deps.Svc)
 }

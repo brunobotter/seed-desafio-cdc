@@ -20,6 +20,8 @@ type InternalService interface {
 	BookService() BookService
 	CountryService() CountryService
 	StateService() StateService
+	PaymentService() PaymentService
+	CustomerService() CustomerService
 }
 
 type AuthorService interface {
@@ -42,4 +44,12 @@ type CountryService interface {
 
 type StateService interface {
 	Save(ctx context.Context, request request.NewStateRequest, countryId int64) (response response.StateResponse, err error)
+}
+
+type PaymentService interface {
+	Save(ctx context.Context, request request.NewPaymentRequest) (response response.PaymentResponse, err error)
+}
+
+type CustomerService interface {
+	Save(ctx context.Context, request request.NewCustomerRequest) (customerResponse response.CustomerResponse, err error)
 }

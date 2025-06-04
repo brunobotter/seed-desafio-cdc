@@ -27,6 +27,8 @@ type Conn struct {
 	book     *bookRepository
 	country  *countryRepository
 	state    *stateRepository
+	custumer *customerRepository
+	payment  *paymentRepository
 }
 
 func Instance(cfg *mapping.Config) (contract.DataManager, error) {
@@ -43,6 +45,8 @@ func Instance(cfg *mapping.Config) (contract.DataManager, error) {
 		instance.book = &bookRepository{db, instance}
 		instance.country = &countryRepository{db, instance}
 		instance.state = &stateRepository{db, instance}
+		instance.custumer = &customerRepository{db, instance}
+		instance.payment = &paymentRepository{db, instance}
 	})
 	return instance, connErr
 }
@@ -101,4 +105,12 @@ func (c *Conn) CountryRepo() contract.CountryRepository {
 
 func (c *Conn) StateRepo() contract.StateRepository {
 	return c.state
+}
+
+func (c *Conn) CustomerRepo() contract.CustomerRepository {
+	return c.custumer
+}
+
+func (c *Conn) PaymentRepo() contract.PaymentRepository {
+	return c.payment
 }

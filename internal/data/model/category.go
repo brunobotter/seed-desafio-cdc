@@ -7,8 +7,8 @@ import (
 )
 
 type CategoryModel struct {
-	ID        uint   `gorm:"primaryKey;autoIncrement"`
-	Name      string `gorm:"unique"`
+	ID        uint
+	Name      string
 	CreatedAt time.Time
 }
 
