@@ -31,7 +31,7 @@ func (s *PaymentController) SaveNewPayment(ctx *gin.Context) {
 	}
 	response, err := s.svc.InternalService().PaymentService().Save(ctx, request, customerId)
 	if err != nil {
-		util.ResponderApiError(ctx, http.StatusBadRequest, err, "Error to save state")
+		util.ResponderApiError(ctx, http.StatusBadRequest, err, "Error to save payment")
 		return
 	}
 	util.ResponderApiOk(ctx, response)

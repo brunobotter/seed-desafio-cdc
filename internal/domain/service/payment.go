@@ -21,34 +21,35 @@ func NewPaymentService(svc contract.ServiceManager) contract.PaymentService {
 	}
 }
 
-func (s *paymentService) Save(ctx context.Context, request request.NewPaymentRequest, customerId int64) (paymentResponse response.PaymentResponse, err error) {
+func (s *paymentService) Save(ctx context.Context, request request.NewPaymentRequest, customerId int64) (response.PaymentResponse, error) {
 	payment, err := request.ToEntity()
+	if err != nil {
+		return response.PaymentResponse{}, err
+	}
+
 	_, err = s.svc.DB().CustomerRepo().GetById(ctx, customerId)
+	if err != nil {
+		return response.PaymentResponse{}, err
+	}
+
 	payment.CustomerId = customerId
 
+	err = s.svc.InternalService().PaymentService().FillItemPrices(ctx, payment.Itens)
 	if err != nil {
-		return paymentResponse, err
+		return response.PaymentResponse{}, err
 	}
-	for i := range payment.Itens {
-		book, err := s.svc.DB().BookRepo().GetById(ctx, payment.Itens[i].BookId)
-		if err != nil {
-			return paymentResponse, err
-		}
 
-		payment.Itens[i].Price = book.Price
-	}
 	err = verifyTotalPrice(payment)
 	if err != nil {
-		return paymentResponse, err
+		return response.PaymentResponse{}, err
 	}
 
 	paymentData, err := s.svc.DB().PaymentRepo().Save(ctx, payment)
 	if err != nil {
-		return paymentResponse, err
+		return response.PaymentResponse{}, err
 	}
 
-	response := response.FromPaymentResponse(paymentData)
-	return response, nil
+	return response.FromPaymentResponse(paymentData), nil
 }
 
 func verifyTotalPrice(payment entity.Payment) error {
@@ -64,5 +65,16 @@ func verifyTotalPrice(payment entity.Payment) error {
 		return errors.New("total does not match calculated total")
 	}
 
+	return nil
+}
+
+func (s *paymentService) FillItemPrices(ctx context.Context, items []entity.Itens) error {
+	for i := range items {
+		book, err := s.svc.DB().BookRepo().GetById(ctx, items[i].BookId)
+		if err != nil {
+			return err
+		}
+		items[i].Price = book.Price
+	}
 	return nil
 }

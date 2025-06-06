@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/brunobotter/casa-codigo/configs/mapping"
+	"github.com/brunobotter/casa-codigo/internal/domain/entity"
 	"github.com/brunobotter/casa-codigo/internal/request"
 	"github.com/brunobotter/casa-codigo/internal/response"
 )
@@ -48,6 +49,7 @@ type StateService interface {
 
 type PaymentService interface {
 	Save(ctx context.Context, request request.NewPaymentRequest, customerId int64) (response response.PaymentResponse, err error)
+	FillItemPrices(ctx context.Context, items []entity.Itens) error
 }
 
 type CustomerService interface {

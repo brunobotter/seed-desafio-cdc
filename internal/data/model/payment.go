@@ -30,7 +30,8 @@ func ToPaymentModel(p entity.Payment) PaymentModel {
 		})
 	}
 	return PaymentModel{
-		Total: p.Total,
-		Itens: itens,
+		CustomerID: p.CustomerId,
+		Total:      p.Total,
+		Itens:      itens,
 	}
 }
