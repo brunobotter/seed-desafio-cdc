@@ -47,7 +47,7 @@ type StateService interface {
 }
 
 type PaymentService interface {
-	Save(ctx context.Context, request request.NewPaymentRequest) (response response.PaymentResponse, err error)
+	Save(ctx context.Context, request request.NewPaymentRequest, customerId int64) (response response.PaymentResponse, err error)
 }
 
 type CustomerService interface {

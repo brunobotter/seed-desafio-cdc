@@ -42,6 +42,7 @@ type StateRepository interface {
 
 type CustomerRepository interface {
 	Save(ctx context.Context, payment entity.Customer) (model.CustomerModel, error)
+	GetById(ctx context.Context, customerId int64) (model.CustomerModel, error)
 }
 
 type PaymentRepository interface {

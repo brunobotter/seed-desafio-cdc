@@ -1,15 +1,13 @@
 package entity
 
 type Payment struct {
-	Email      string
-	Name       string
-	Lastname   string
-	Document   string
-	Address    string
-	Complement string
-	City       string
-	Country    string
-	State      *string
-	Phone      string
-	CEP        string
+	CustomerId int64
+	Total      float64
+	Itens      []Itens
+}
+
+type Itens struct {
+	BookId int64
+	Amount int64
+	Price  float64
 }

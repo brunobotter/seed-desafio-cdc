@@ -8,32 +8,29 @@ import (
 
 type PaymentModel struct {
 	ID         uint
-	Email      string
-	Name       string
-	Lastname   string
-	Document   string
-	Address    string
-	Complement string
-	City       string
-	Country    string
-	State      *string
-	Phone      string
-	CEP        string
+	CustomerID int64
+	Total      float64
 	CreatedAt  time.Time
+	Itens      []PaymentItemModel
 }
 
-func ToPaymentModel(e entity.Payment) PaymentModel {
+type PaymentItemModel struct {
+	BookID int64
+	Amount int64
+	Price  float64
+}
+
+func ToPaymentModel(p entity.Payment) PaymentModel {
+	var itens []PaymentItemModel
+	for _, item := range p.Itens {
+		itens = append(itens, PaymentItemModel{
+			BookID: item.BookId,
+			Amount: item.Amount,
+			Price:  item.Price,
+		})
+	}
 	return PaymentModel{
-		Email:      e.Email,
-		Name:       e.Name,
-		Lastname:   e.Lastname,
-		Document:   e.Document,
-		Address:    e.Address,
-		Complement: e.Complement,
-		City:       e.City,
-		Country:    e.Country,
-		State:      e.State,
-		Phone:      e.Phone,
-		CEP:        e.CEP,
+		Total: p.Total,
+		Itens: itens,
 	}
 }

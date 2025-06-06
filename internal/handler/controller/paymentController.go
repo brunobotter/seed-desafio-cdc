@@ -7,7 +7,6 @@ import (
 	"github.com/brunobotter/casa-codigo/internal/request"
 	"github.com/brunobotter/casa-codigo/internal/util"
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 )
 
 type PaymentController struct {
@@ -26,9 +25,11 @@ func (s *PaymentController) SaveNewPayment(ctx *gin.Context) {
 		util.ResponderApiError(ctx, http.StatusBadRequest, err, "Invalid Body")
 		return
 	}
-	validate := validator.New()
-	validate.RegisterValidation("cpf_cnpj", util.CpfCnpjValidator)
-	response, err := s.svc.InternalService().PaymentService().Save(ctx, request)
+	customerId, err := util.GetAndValidateIntParam(ctx, "customerId", "Customer Id invalid", false)
+	if err != nil {
+		util.ResponderApiError(ctx, http.StatusBadRequest, err, "Validation error")
+	}
+	response, err := s.svc.InternalService().PaymentService().Save(ctx, request, customerId)
 	if err != nil {
 		util.ResponderApiError(ctx, http.StatusBadRequest, err, "Error to save state")
 		return

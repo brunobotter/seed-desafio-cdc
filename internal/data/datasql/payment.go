@@ -2,6 +2,8 @@ package datasql
 
 import (
 	"context"
+	"fmt"
+	"time"
 
 	"github.com/brunobotter/casa-codigo/internal/data/model"
 	"github.com/brunobotter/casa-codigo/internal/domain/contract"
@@ -13,44 +15,52 @@ type paymentRepository struct {
 	data contract.RepoManager
 }
 
-func (r *paymentRepository) Save(ctx context.Context, customer entity.Payment) (model.PaymentModel, error) {
-	/*customerModel := model.ToCustomerModel(customer)
+func (r *paymentRepository) Save(ctx context.Context, payment entity.Payment) (model.PaymentModel, error) {
+	paymentModel := model.ToPaymentModel(payment)
 
-	query := `
-		INSERT INTO customer (email, name, lastname, document, address, complement, city, country, state, phone, cep, created_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+	paymentModel.CreatedAt = time.Now()
+
+	// Inserção na tabela payments
+	insertPaymentQuery := `
+		INSERT INTO payments (customer_id, total, created_at)
+		VALUES (?, ?, ?)
 	`
-
-	now := time.Now()
-	customerModel.CreatedAt = now
-
 	result, err := r.conn.ExecContext(
 		ctx,
-		query,
-		customerModel.Email,
-		customerModel.Name,
-		customerModel.Lastname,
-		customerModel.Document,
-		customerModel.Address,
-		customerModel.Complement,
-		customerModel.City,
-		customerModel.Country,
-		customerModel.State,
-		customerModel.Phone,
-		customerModel.CEP,
-		customerModel.CreatedAt,
+		insertPaymentQuery,
+		paymentModel.CustomerID,
+		paymentModel.Total,
+		paymentModel.CreatedAt,
 	)
 	if err != nil {
-		return model.PaymentModel{}, fmt.Errorf("failed to insert customer: %w", err)
+		return model.PaymentModel{}, fmt.Errorf("failed to insert payment: %w", err)
 	}
 
-	id, err := result.LastInsertId()
+	paymentID, err := result.LastInsertId()
 	if err != nil {
-		return model.PaymentModel{}, fmt.Errorf("failed to get inserted ID: %w", err)
+		return model.PaymentModel{}, fmt.Errorf("failed to get inserted payment ID: %w", err)
+	}
+	paymentModel.ID = uint(paymentID)
+
+	// Inserção dos itens
+	insertItemQuery := `
+		INSERT INTO payment_items (payment_id, book_id, amount, price)
+		VALUES (?, ?, ?, ?)
+	`
+
+	for _, item := range paymentModel.Itens {
+		_, err := r.conn.ExecContext(
+			ctx,
+			insertItemQuery,
+			paymentID,
+			item.BookID,
+			item.Amount,
+			item.Price,
+		)
+		if err != nil {
+			return model.PaymentModel{}, fmt.Errorf("failed to insert payment item: %w", err)
+		}
 	}
 
-	customerModel.ID = uint(id)
-
-	return customerModel, nil*/
-	return model.PaymentModel{}, nil
+	return paymentModel, nil
 }
