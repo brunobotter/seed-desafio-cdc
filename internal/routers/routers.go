@@ -16,6 +16,7 @@ func Initialize(deps *configs.Deps) {
 	router.InitializeStateRouters(gin, deps)
 	router.InitializeCustomerRouters(gin, deps)
 	router.InitializePaymentRouters(gin, deps)
+	router.InitializeCouponRouters(gin, deps)
 
 	gin.Run(":8080")
 }

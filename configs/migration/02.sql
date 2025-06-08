@@ -13,3 +13,11 @@ CREATE TABLE payment_items (
     price DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (payment_id) REFERENCES payments(id) ON DELETE CASCADE
 );
+
+CREATE TABLE coupon (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(50) NOT NULL UNIQUE,             
+    discount_percent DECIMAL(5,2) NOT NULL, 
+    valid_until DATETIME NOT NULL,                 
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP  
+);

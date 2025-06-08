@@ -34,6 +34,6 @@ func (s *PaymentController) SaveNewPayment(ctx *gin.Context) {
 		util.ResponderApiError(ctx, http.StatusBadRequest, err, "Error to save payment")
 		return
 	}
-	util.ResponderApiOk(ctx, response)
+	util.ResponderApiCreated(ctx, response)
 
 }

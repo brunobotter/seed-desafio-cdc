@@ -22,6 +22,13 @@ func ResponderApiOk(c *gin.Context, data interface{}) {
 	c.JSON(http.StatusOK, res)
 }
 
+func ResponderApiCreated(c *gin.Context, data interface{}) {
+	res := Responder{
+		Data: data,
+	}
+	c.JSON(http.StatusCreated, res)
+}
+
 func ResponderApiError(c *gin.Context, status int, err error, msg string) {
 	res := Responder{
 		Error:   err.Error(),

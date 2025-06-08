@@ -15,6 +15,7 @@ type RepoManager interface {
 	StateRepo() StateRepository
 	CustomerRepo() CustomerRepository
 	PaymentRepo() PaymentRepository
+	CouponRepo() CouponRepository
 }
 
 type AuthorRepository interface {
@@ -47,4 +48,8 @@ type CustomerRepository interface {
 
 type PaymentRepository interface {
 	Save(ctx context.Context, payment entity.Payment) (model.PaymentModel, error)
+}
+
+type CouponRepository interface {
+	Save(ctx context.Context, counpon entity.Coupon) (model.CouponModel, error)
 }

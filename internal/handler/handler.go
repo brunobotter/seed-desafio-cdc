@@ -13,6 +13,7 @@ var (
 	StateController    *controller.StateController
 	PaymentController  *controller.PaymentController
 	CustomerController *controller.CustomerController
+	CouponController   *controller.CouponController
 )
 
 func InitializeHandler(deps *configs.Deps) {
@@ -23,4 +24,5 @@ func InitializeHandler(deps *configs.Deps) {
 	StateController = controller.NewStateController(deps.Svc)
 	PaymentController = controller.NewPaymentController(deps.Svc)
 	CustomerController = controller.NewCustomerController(deps.Svc)
+	CouponController = controller.NewCouponController(deps.Svc)
 }

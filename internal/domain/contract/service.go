@@ -23,6 +23,7 @@ type InternalService interface {
 	StateService() StateService
 	PaymentService() PaymentService
 	CustomerService() CustomerService
+	CouponService() CouponService
 }
 
 type AuthorService interface {
@@ -53,5 +54,9 @@ type PaymentService interface {
 }
 
 type CustomerService interface {
-	Save(ctx context.Context, request request.NewCustomerRequest) (customerResponse response.CustomerResponse, err error)
+	Save(ctx context.Context, request request.NewCustomerRequest) (response response.CustomerResponse, err error)
+}
+
+type CouponService interface {
+	Save(ctx context.Context, request request.NewCouponRequest) (response response.CouponResponse, err error)
 }
