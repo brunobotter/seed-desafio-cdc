@@ -33,5 +33,14 @@ jobs:
       - name: Instalar dependências
         run: go mod download
 
-      - name: Rodar testes
-        run: go test ./...
+      - name: Rodar testes com cobertura
+        run: go test -coverprofile=coverage.out ./...
+
+      - name: Mostrar cobertura no terminal
+        run: go tool cover -func=coverage.out
+
+      - name: Upload da cobertura como artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: cobertura
+          path: coverage.out
