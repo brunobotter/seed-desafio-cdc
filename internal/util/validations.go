@@ -1,6 +1,7 @@
 package util
 
 import (
+	"math"
 	"regexp"
 	"strconv"
 	"strings"
@@ -34,4 +35,8 @@ func CpfCnpjValidator(fl validator.FieldLevel) bool {
 	matchCNPJ, _ := regexp.MatchString(cnpjRegex, doc)
 
 	return matchCPF || matchCNPJ
+}
+
+func RoundToTwoDecimals(f float64) float64 {
+	return math.Round(f*100) / 100
 }

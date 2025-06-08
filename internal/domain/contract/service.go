@@ -51,7 +51,7 @@ type StateService interface {
 type PaymentService interface {
 	Save(ctx context.Context, request request.NewPaymentRequest, customerId int64) (response response.PaymentResponse, err error)
 	FillItemPrices(ctx context.Context, items []entity.Itens) error
-	ApplyCoupon(ctx context.Context, payment entity.Payment) error
+	ApplyCoupon(ctx context.Context, payment *entity.Payment) error
 }
 
 type CustomerService interface {

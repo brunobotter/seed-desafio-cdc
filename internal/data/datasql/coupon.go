@@ -60,6 +60,7 @@ func (r *couponRepository) GetByCoupon(ctx context.Context, coupon string) (mode
 		&couponModel.Code,
 		&couponModel.DiscountPercent,
 		&couponModel.ValidUntil,
+		&couponModel.CreatedAt,
 	)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {

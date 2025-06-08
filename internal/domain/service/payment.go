@@ -36,7 +36,7 @@ func (s *paymentService) Save(ctx context.Context, request request.NewPaymentReq
 	payment.CustomerId = customerId
 
 	if payment.Coupon != "" {
-		err = s.svc.InternalService().PaymentService().ApplyCoupon(ctx, payment)
+		err = s.svc.InternalService().PaymentService().ApplyCoupon(ctx, &payment)
 		if err != nil {
 			return response.PaymentResponse{}, err
 		}
@@ -46,7 +46,6 @@ func (s *paymentService) Save(ctx context.Context, request request.NewPaymentReq
 	if err != nil {
 		return response.PaymentResponse{}, err
 	}
-
 	err = verifyTotalPrice(&payment)
 	if err != nil {
 		return response.PaymentResponse{}, err
@@ -57,7 +56,7 @@ func (s *paymentService) Save(ctx context.Context, request request.NewPaymentReq
 		return response.PaymentResponse{}, err
 	}
 
-	return response.FromPaymentResponse(paymentData), nil
+	return response.FromPaymentResponse(paymentData, payment.Discount), nil
 }
 
 func verifyTotalPrice(payment *entity.Payment) error {
@@ -65,6 +64,13 @@ func verifyTotalPrice(payment *entity.Payment) error {
 
 	for _, item := range payment.Itens {
 		total += float64(item.Amount) * item.Price
+	}
+
+	if payment.CouponPercentDiscount > 0 {
+		discountAmount := (total * payment.CouponPercentDiscount) / 100
+
+		total -= discountAmount
+		payment.Discount = discountAmount
 	}
 
 	const epsilon = 0.01
@@ -87,7 +93,7 @@ func (s *paymentService) FillItemPrices(ctx context.Context, items []entity.Iten
 	return nil
 }
 
-func (s *paymentService) ApplyCoupon(ctx context.Context, payment entity.Payment) error {
+func (s *paymentService) ApplyCoupon(ctx context.Context, payment *entity.Payment) error {
 	coupon, err := s.svc.DB().CouponRepo().GetByCoupon(ctx, payment.Coupon)
 	if err != nil {
 		return err
@@ -95,7 +101,7 @@ func (s *paymentService) ApplyCoupon(ctx context.Context, payment entity.Payment
 	if !verifyDate(coupon.ValidUntil) {
 		return errors.New("coupon expired")
 	}
-
+	payment.CouponPercentDiscount = coupon.DiscountPercent
 	discount := (payment.Total * coupon.DiscountPercent) / 100
 	payment.Total -= discount
 
