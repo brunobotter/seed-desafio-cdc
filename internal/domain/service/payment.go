@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"math"
+	"time"
 
 	"github.com/brunobotter/casa-codigo/internal/domain/contract"
 	"github.com/brunobotter/casa-codigo/internal/domain/entity"
@@ -34,12 +35,19 @@ func (s *paymentService) Save(ctx context.Context, request request.NewPaymentReq
 
 	payment.CustomerId = customerId
 
+	if payment.Coupon != "" {
+		err = s.svc.InternalService().PaymentService().ApplyCoupon(ctx, payment)
+		if err != nil {
+			return response.PaymentResponse{}, err
+		}
+	}
+
 	err = s.svc.InternalService().PaymentService().FillItemPrices(ctx, payment.Itens)
 	if err != nil {
 		return response.PaymentResponse{}, err
 	}
 
-	err = verifyTotalPrice(payment)
+	err = verifyTotalPrice(&payment)
 	if err != nil {
 		return response.PaymentResponse{}, err
 	}
@@ -52,7 +60,7 @@ func (s *paymentService) Save(ctx context.Context, request request.NewPaymentReq
 	return response.FromPaymentResponse(paymentData), nil
 }
 
-func verifyTotalPrice(payment entity.Payment) error {
+func verifyTotalPrice(payment *entity.Payment) error {
 	var total float64
 
 	for _, item := range payment.Itens {
@@ -77,4 +85,23 @@ func (s *paymentService) FillItemPrices(ctx context.Context, items []entity.Iten
 		items[i].Price = book.Price
 	}
 	return nil
+}
+
+func (s *paymentService) ApplyCoupon(ctx context.Context, payment entity.Payment) error {
+	coupon, err := s.svc.DB().CouponRepo().GetByCoupon(ctx, payment.Coupon)
+	if err != nil {
+		return err
+	}
+	if !verifyDate(coupon.ValidUntil) {
+		return errors.New("coupon expired")
+	}
+
+	discount := (payment.Total * coupon.DiscountPercent) / 100
+	payment.Total -= discount
+
+	return nil
+}
+
+func verifyDate(date time.Time) bool {
+	return date.After(time.Now())
 }

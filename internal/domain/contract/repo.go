@@ -51,5 +51,6 @@ type PaymentRepository interface {
 }
 
 type CouponRepository interface {
-	Save(ctx context.Context, counpon entity.Coupon) (model.CouponModel, error)
+	Save(ctx context.Context, coupon entity.Coupon) (model.CouponModel, error)
+	GetByCoupon(ctx context.Context, coupon string) (model.CouponModel, error)
 }

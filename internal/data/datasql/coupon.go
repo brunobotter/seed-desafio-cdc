@@ -2,6 +2,8 @@ package datasql
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/brunobotter/casa-codigo/internal/data/model"
@@ -40,4 +42,31 @@ func (r *couponRepository) Save(ctx context.Context, coupon entity.Coupon) (mode
 	couponModel.ID = paymentID
 
 	return couponModel, nil
+}
+
+func (r *couponRepository) GetByCoupon(ctx context.Context, coupon string) (model.CouponModel, error) {
+	var couponModel model.CouponModel
+
+	query := `
+        SELECT id, code, discount_percent, valid_until, created_at
+        FROM coupon
+        WHERE code = ?
+        ORDER BY created_at DESC
+        LIMIT 1
+    `
+	row := r.conn.QueryRowContext(ctx, query, coupon)
+	err := row.Scan(
+		&couponModel.ID,
+		&couponModel.Code,
+		&couponModel.DiscountPercent,
+		&couponModel.ValidUntil,
+	)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return model.CouponModel{}, fmt.Errorf("coupon not found")
+		}
+		return model.CouponModel{}, fmt.Errorf("failed to fetch coupon: %w", err)
+	}
+	return couponModel, nil
+
 }

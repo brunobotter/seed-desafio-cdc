@@ -7,8 +7,9 @@ import (
 )
 
 type NewPaymentRequest struct {
-	Total float64        `json:"total" validate:"required"`
-	Itens []ItensRequest `json:"itens" validate:"required"`
+	Total  float64        `json:"total" validate:"required"`
+	Coupon string         `json:"coupon"`
+	Itens  []ItensRequest `json:"itens" validate:"required"`
 }
 
 type ItensRequest struct {
@@ -29,7 +30,8 @@ func (r NewPaymentRequest) ToEntity() (entity.Payment, error) {
 	}
 
 	return entity.Payment{
-		Total: r.Total,
-		Itens: itens,
+		Total:  r.Total,
+		Coupon: r.Coupon,
+		Itens:  itens,
 	}, nil
 }
