@@ -133,6 +133,7 @@ func TestBookService_Save(t *testing.T) {
 }
 
 func TestBookService_GetById(t *testing.T) {
+	now := time.Now().Truncate(time.Second)
 	tests := []struct {
 		name          string
 		bookId        int64
@@ -181,7 +182,7 @@ func TestBookService_GetById(t *testing.T) {
 							Price:       100,
 							Page:        100,
 							ISBN:        "123",
-							PublishDate: time.Now(),
+							PublishDate: now,
 						}, nil
 					},
 				}
@@ -195,7 +196,7 @@ func TestBookService_GetById(t *testing.T) {
 				Price:       100,
 				Page:        100,
 				ISBN:        "123",
-				PublishDate: time.Now(),
+				PublishDate: now,
 			},
 		},
 	}
@@ -220,7 +221,7 @@ func TestBookService_GetById(t *testing.T) {
 				require.Equal(t, tc.wantModel.Price, resp.Price)
 				require.Equal(t, tc.wantModel.Page, resp.Page)
 				require.Equal(t, tc.wantModel.ISBN, resp.ISBN)
-				require.Equal(t, tc.wantModel.PublishDate, resp.PublishDate)
+				require.WithinDuration(t, tc.wantModel.PublishDate, resp.PublishDate, time.Second)
 			}
 		})
 	}
