@@ -14,7 +14,7 @@ type BookResponse struct {
 	Price        float64   `json:"price"`
 	Page         int64     `json:"page"`
 	ISBN         string    `json:"isbn"`
-	PublishDate  string    `json:"publish_date"`
+	PublishDate  time.Time `json:"publish_date"`
 	AuthorName   string    `json:"author_name"`
 	CategoryName string    `json:"category_name"`
 	CreatedAt    time.Time `json:"created_at"`

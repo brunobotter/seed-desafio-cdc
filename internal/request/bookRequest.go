@@ -24,7 +24,7 @@ func (r NewBookRequest) ToEntity(categoryId int64, authorId int64) entity.Book {
 		Price:       r.Price,
 		Page:        r.Page,
 		ISBN:        r.ISBN,
-		PublishDate: r.PublishDate.Format("2006-01-02"),
+		PublishDate: r.PublishDate,
 		CategoryId:  categoryId,
 		AuthorId:    authorId,
 	}

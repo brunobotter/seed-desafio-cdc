@@ -14,7 +14,7 @@ type BookModel struct {
 	Price       float64
 	Page        int64
 	ISBN        string
-	PublishDate string
+	PublishDate time.Time
 	AuthorID    uint
 	CategoryID  uint
 	CreatedAt   time.Time
@@ -42,7 +42,7 @@ type BookByIdModel struct {
 	Price        float64
 	Page         int64
 	ISBN         string
-	PublishDate  string
+	PublishDate  time.Time
 	AuthorName   string
 	CategoryName string
 	CreatedAt    time.Time

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 
 	"github.com/brunobotter/casa-codigo/internal/domain/contract"
 	"github.com/brunobotter/casa-codigo/internal/request"
@@ -18,8 +19,13 @@ func NewCategoryService(svc contract.ServiceManager) contract.CategoryService {
 	}
 }
 
-func (s *categoryService) Save(ctx context.Context, categoryRequest request.NewCategoryRequest) (categoryResponse response.CategoryResponse, err error) {
-	category := categoryRequest.ToEntity()
+func (s *categoryService) Save(ctx context.Context, request request.NewCategoryRequest) (categoryResponse response.CategoryResponse, err error) {
+	if request.Name == "" {
+		return response.CategoryResponse{}, errors.New("invalid category")
+	}
+
+	category := request.ToEntity()
+
 	newCategory, err := s.svc.DB().CategoryRepo().Save(ctx, category)
 	if err != nil {
 		return response.CategoryResponse{}, err
