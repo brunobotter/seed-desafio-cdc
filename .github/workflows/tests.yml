@@ -29,3 +29,8 @@ jobs:
       - name: Mostrar cobertura no terminal
         run: go tool cover -func=coverage.out
 
+      - name: Upload da cobertura como artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: cobertura
+          path: coverage.out
