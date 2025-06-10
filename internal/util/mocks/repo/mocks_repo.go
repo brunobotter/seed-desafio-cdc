@@ -40,3 +40,37 @@ type CategoryRepoMock struct {
 func (m *CategoryRepoMock) Save(ctx context.Context, category entity.Category) (model.CategoryModel, error) {
 	return m.SaveFunc(ctx, category)
 }
+
+type CountryRepoMock struct {
+	SaveFunc   func(ctx context.Context, country entity.Country) (model.CountryModel, error)
+	VerifyFunc func(ctx context.Context, country string, state *string) (model.CountryState, error)
+}
+
+func (m *CountryRepoMock) Save(ctx context.Context, country entity.Country) (model.CountryModel, error) {
+	return m.SaveFunc(ctx, country)
+}
+
+func (m *CountryRepoMock) VerifyCountryState(ctx context.Context, country string, state *string) (model.CountryState, error) {
+	return m.VerifyFunc(ctx, country, state)
+}
+
+type StateRepoMock struct {
+	SaveFunc func(ctx context.Context, state entity.State) (model.StateModel, error)
+}
+
+func (m *StateRepoMock) Save(ctx context.Context, state entity.State) (model.StateModel, error) {
+	return m.SaveFunc(ctx, state)
+}
+
+type CustomerRepoMock struct {
+	SaveFunc    func(ctx context.Context, payment entity.Customer) (model.CustomerModel, error)
+	GetByIdFunc func(ctx context.Context, customerId int64) (model.CustomerModel, error)
+}
+
+func (m *CustomerRepoMock) Save(ctx context.Context, payment entity.Customer) (model.CustomerModel, error) {
+	return m.SaveFunc(ctx, payment)
+}
+
+func (m *CustomerRepoMock) GetById(ctx context.Context, customerId int64) (model.CustomerModel, error) {
+	return m.GetByIdFunc(ctx, customerId)
+}

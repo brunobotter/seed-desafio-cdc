@@ -3,6 +3,8 @@ package mocks_service
 import (
 	"context"
 
+	"github.com/brunobotter/casa-codigo/internal/data/model"
+	"github.com/brunobotter/casa-codigo/internal/domain/entity"
 	"github.com/brunobotter/casa-codigo/internal/request"
 	"github.com/brunobotter/casa-codigo/internal/response"
 )
@@ -31,4 +33,28 @@ func (m *BookServiceMock) GetById(ctx context.Context, bookId int64) (bookRespon
 
 func (m *BookServiceMock) GetAll(ctx context.Context) (bookResponse response.BookListResponse, err error) {
 	return m.GetAllFunc(ctx)
+}
+
+type CountryServiceMock struct {
+	SaveFunc func(ctx context.Context, request request.NewCountryRequest) (response response.CountryResponse, err error)
+}
+
+func (m *CountryServiceMock) Save(ctx context.Context, request request.NewCountryRequest) (response response.CountryResponse, err error) {
+	return m.SaveFunc(ctx, request)
+}
+
+type StateServiceMock struct {
+	SaveFunc func(ctx context.Context, state entity.State) (model.StateModel, error)
+}
+
+func (m *StateServiceMock) Save(ctx context.Context, state entity.State) (model.StateModel, error) {
+	return m.SaveFunc(ctx, state)
+}
+
+type CustomerServiceMock struct {
+	SaveFunc func(ctx context.Context, request request.NewCustomerRequest) (response response.CustomerResponse, err error)
+}
+
+func (m *CustomerServiceMock) Save(ctx context.Context, request request.NewCustomerRequest) (response response.CustomerResponse, err error) {
+	return m.SaveFunc(ctx, request)
 }

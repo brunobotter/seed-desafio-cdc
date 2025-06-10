@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 
 	"github.com/brunobotter/casa-codigo/internal/domain/contract"
 	"github.com/brunobotter/casa-codigo/internal/request"
@@ -19,6 +20,9 @@ func NewCountryService(svc contract.ServiceManager) contract.CountryService {
 }
 
 func (s *countryService) Save(ctx context.Context, request request.NewCountryRequest) (countryResponse response.CountryResponse, err error) {
+	if request.Name == "" {
+		return response.CountryResponse{}, errors.New("invalid country")
+	}
 	country := request.ToEntity()
 	countryDb, err := s.svc.DB().CountryRepo().Save(ctx, country)
 	if err != nil {
